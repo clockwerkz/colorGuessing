@@ -1,13 +1,58 @@
-var colors = generateRandomColors(6);
-
+var numSquares = 6;
+var colors = generateRandomColors(numSquares);
 var colorDisplay = document.querySelector("h1 span");
 var squares = document.querySelectorAll(".square");
 var messageDisplay = document.querySelector("#message");
 var h1 = document.querySelector("h1");
+var resetBtn = document.getElementById("reset");
+var easyBtn = document.querySelector("#easyBtn");
+var hardBtn = document.querySelector("#hardBtn");
+
 
 var pickedColor = pickColor();
 
 colorDisplay.textContent = pickedColor;
+
+easyBtn.addEventListener("click", function () {
+	this.classList.add("selected");
+	hardBtn.classList.remove("selected");
+	numSquares = 3;
+	colors = generateRandomColors(numSquares);
+	pickedColor = pickColor();
+	colorDisplay.textContent = pickedColor;
+	for (var i=0; i<squares.length; i++){
+		if (colors[i]){
+			squares[i].style.backgroundColor = colors[i];
+		} else {
+			squares[i].style.display = "none";
+		}
+	}
+});
+
+hardBtn.addEventListener("click", function () {
+	numSquares = 6;
+	this.classList.add("selected");
+	easyBtn.classList.remove("selected");
+	colors = generateRandomColors(numSquares);
+	pickedColor = pickColor();
+	colorDisplay.textContent = pickedColor;
+	for (var i=0; i<squares.length; i++){
+		squares[i].style.backgroundColor = colors[i];
+		squares[i].style.display="block";	
+	}
+});
+
+resetBtn.addEventListener("click", function(){
+	this.textContent = "New Colors";
+	colors = generateRandomColors(numSquares);
+	pickedColor = pickColor();
+	colorDisplay.textContent = pickedColor;
+	messageDisplay.textContent = "";
+	h1.style.backgroundColor = "#232323";
+	for (var i=0; i<squares.length; i++){
+		squares[i].style.backgroundColor = colors[i];
+	}
+});
 
 for (var i=0; i<squares.length; i++){
 	//add initial colors to squares
@@ -21,6 +66,7 @@ for (var i=0; i<squares.length; i++){
 			messageDisplay.textContent = "Correct!";
 			changeColors(clickedColor);
 			h1.style.backgroundColor = clickedColor;
+			resetBtn.textContent = "Play Again?";
 		} else {
 			messageDisplay.textContent = "Try Again";
 			this.style.backgroundColor = "#232323";
